@@ -51,21 +51,13 @@ lint: ## check style with flake8
 	flake8 {{ cookiecutter.project_slug }} tests
 
 test: ## run tests quickly with the default Python
-{%- if cookiecutter.use_pytest == 'y' %}
-	pytest
-{%- else %}
-	python setup.py test
-{%- endif %}
+	pytest -v
 
 test-all: ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-{%- if cookiecutter.use_pytest == 'y' %}
 	coverage run --source {{ cookiecutter.project_slug }} -m pytest
-{%- else %}
-	coverage run --source {{ cookiecutter.project_slug }} setup.py test
-{%- endif %}
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
@@ -90,4 +82,55 @@ dist: clean ## builds source and wheel package
 	ls -l dist
 
 install: clean ## install the package to the active Python's site-packages
-	python setup.py install
+	pip3 install -r requirements_dev.txt -r requirements.txt
+
+
+all bootstrap deploy diff destroy: check-credentials
+
+bootstrap: qualifier 			:= $(shell cat cdk.json | jq -r '.context."@aws-cdk/core:bootstrapQualifier"')
+bootstrap: main_account 		:= $(shell cat cdk.json | jq -r '.context.environments.eksMaster.account')
+bootstrap: main_region 			:= $(shell cat cdk.json | jq -r '.context.environments.eksMaster.region')
+bootstrap: tooling_account 		:= $(shell cat cdk.json | jq -r '.context.environments.tooling.account')
+bootstrap: tooling_region 		:= $(shell cat cdk.json | jq -r '.context.environments.tooling.region')
+bootstrap: dr_account 			:= $(shell cat cdk.json | jq -r '.context.environments.disasterRecovery.account')
+bootstrap: dr_region 			:= $(shell cat cdk.json | jq -r '.context.environments.disasterRecovery.region')
+
+check-credentials:
+	@echo 'Checking AWS Credentials'
+	aws sts get-caller-identity
+
+ls synth diff deploy destroy:
+	@echo "\033[92mRunning CDK $@ $(filter-out $@,$(MAKECMDGOALS))\033[0m"
+	@cdk $@ --all --require-approval never --progress events \
+		--parameters EcoStruxure-Secrets:ImagePullSecretUsername="$(CDK_IMAGE_PULL_SECRET_USERNAME)" \
+		--parameters EcoStruxure-Secrets:ImagePullSecretPassword="$(CDK_IMAGE_PULL_SECRET_PASSWORD)" \
+		--parameters EcoStruxure-Secrets:ArgoCDOIDCConfigSecret="$(CDK_ARGOCD_OIDC_CONFIG_SECRET)" \
+		--parameters EcoStruxure-Secrets:AppOIDCConfigSecret="$(CDK_APP_OIDC_CONFIG_SECRET)"
+
+bootstrap:
+	@$(MAKE) bootstrap-environment account=$(main_account) region=$(main_region) qualifier=${qualifier}
+	@$(MAKE) bootstrap-environment account=$(tooling_account) region=$(tooling_region) qualifier=${qualifier}
+	@$(MAKE) bootstrap-environment account=$(dr_account) region=$(dr_region) qualifier=${qualifier}
+
+bootstrap-environment:
+	@echo "\033[92mRunning CDK bootstrap aws://$(account)/$(region)\033[0m"
+	@aws cloudformation deploy \
+		--stack-name 'CDKToolkit' \
+		--template-file prerequisites/cdk-bootstrap.yaml \
+		--role-arn "arn:aws:iam::$(account):role/cdk-$(qualifier)-cfn-exec-role-$(account)-$(region)" \
+		--parameter-overrides "Qualifier=$(qualifier)" \
+		--no-fail-on-empty-changeset \
+		--capabilities CAPABILITY_NAMED_IAM \
+		--region "$(region)"
+
+	@aws cloudformation describe-stack-events \
+		--stack-name 'CDKToolkit' \
+		--region "$(region)"
+
+security-checks:
+	@cdk synth
+	@docker-compose up --abort-on-container-exit
+	@checkov -d .
+#\
+#		--skip-check CKV_AWS_18,CKV_AWS_51,CKV_AWS_66,CKV_AWS_56,CKV_AWS_55,CKV_AWS_21,CKV_AWS_54,CKV_AWS_53,CKV_AWS_33,CKV_AWS_23,CKV_AWS_111,CKV_AWS_79,CKV_AWS_107,CKV_AWS_109
+

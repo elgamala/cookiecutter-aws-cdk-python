@@ -1,0 +1,38 @@
+{
+  "app": "python3 app.py",
+  "context": {
+    "@aws-cdk/core:bootstrapQualifier": "{{ cookiecutter.project_slug }}",
+    "@aws-cdk/core:enableStackNameDuplicates": "true",
+    "aws-cdk:enableDiffNoFail": "true",
+    "@aws-cdk/core:stackRelativeExports": "true",
+    "@aws-cdk/core:newStyleStackSynthesis": "true",
+    "environments": {
+      "master": {
+        "account": "605104900840",
+        "region": "us-east-1"
+      },
+      "tooling": {
+        "account": "605104900840",
+        "region": "us-east-1"
+      },
+      "disasterRecovery": {
+        "account": "605104900840",
+        "region": "us-east-2"
+      }
+    },
+    "parameters": {
+      "kms": {
+        "keyAdminRoleNames": [
+          "OrganizationAccountAccessRole"
+        ]
+      },
+        "all": {
+        "tags": []
+      },
+      "codeCommit": "{{ cookiecutter.project_slug }}",
+      "cicdPipeline": {
+        "addManualApprovalStep": false
+      }
+    }
+  }
+}

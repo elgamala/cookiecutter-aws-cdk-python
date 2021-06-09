@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 """The setup script."""
-
 from setuptools import setup, find_packages
 
 with open('README.rst') as readme_file:
@@ -10,9 +9,25 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [{%- if cookiecutter.command_line_interface|lower == 'click' %}'Click>=7.0',{%- endif %} ]
+aws_cdk_version="{{ cookiecutter.aws_cdk_version }}"
 
-test_requirements = [{%- if cookiecutter.use_pytest == 'y' %}'pytest>=3',{%- endif %} ]
+requirements = [
+    f"aws-cdk.core{aws_cdk_version}",
+    f"aws-cdk.aws_iam{aws_cdk_version}",
+    f"aws-cdk.aws_s3{aws_cdk_version}",
+    f"aws-cdk.aws_codecommit{aws_cdk_version}",
+    f"aws-cdk.aws_ssm{aws_cdk_version}",
+    f"aws-cdk.aws_codepipeline{aws_cdk_version}",
+    f"aws-cdk.aws_codepipeline_actions{aws_cdk_version}",
+    f"aws-cdk.aws_codebuild{aws_cdk_version}",
+    f"aws-cdk.aws_ec2{aws_cdk_version}",
+    f"aws-cdk.aws_backup{aws_cdk_version}",
+    "cdk-expects-matcher>=0.1.0",
+    "GitPython",
+    "checkov>=2.0.173"
+]
+
+test_requirements = ['pytest>=3']
 
 {%- set license_classifiers = {
     'MIT license': 'License :: OSI Approved :: MIT License',
@@ -26,9 +41,16 @@ setup(
     author="{{ cookiecutter.full_name.replace('\"', '\\\"') }}",
     author_email='{{ cookiecutter.email }}',
     python_requires='>=3.6',
+    package_dir={"": "cdk"},
+    packages=find_packages(where="cdk"),
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
+        'Intended Audience :: Architects',
+        'Intended Audience :: DevOps Engineers',
+        'Topic :: AWS CDK',
+        'Topic :: Infrastructure as code',
+        'Topic :: IaC'
 {%- if cookiecutter.open_source_license in license_classifiers %}
         '{{ license_classifiers[cookiecutter.open_source_license] }}',
 {%- endif %}
@@ -39,13 +61,6 @@ setup(
         'Programming Language :: Python :: 3.8',
     ],
     description="{{ cookiecutter.project_short_description }}",
-    {%- if 'no' not in cookiecutter.command_line_interface|lower %}
-    entry_points={
-        'console_scripts': [
-            '{{ cookiecutter.project_slug }}={{ cookiecutter.project_slug }}.cli:main',
-        ],
-    },
-    {%- endif %}
     install_requires=requirements,
 {%- if cookiecutter.open_source_license in license_classifiers %}
     license="{{ cookiecutter.open_source_license }}",
@@ -54,7 +69,6 @@ setup(
     include_package_data=True,
     keywords='{{ cookiecutter.project_slug }}',
     name='{{ cookiecutter.project_slug }}',
-    packages=find_packages(include=['{{ cookiecutter.project_slug }}', '{{ cookiecutter.project_slug }}.*']),
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}',
