@@ -5,13 +5,10 @@ services:
     image: "stelligent/cfn_nag"
     volumes:
       - ./cdk.out:/templates
-    entrypoint: "find /templates -name '*.template.json' -maxdepth 1 -type f -exec cfn_nag --no-allow-suppression  {} +"
+    entrypoint: "find /templates -name '*.template.json' -maxdepth 1 -type f -exec cfn_nag --debug --no-allow-suppression  {} +"
 
   cfn_nag_cfn:
     image: "stelligent/cfn_nag"
     volumes:
       - ./prerequisites:/templates
-    entrypoint: "find /templates -name '.yaml' -maxdepth 1 -type f -exec cfn_nag --no-allow-suppression  {} +"
-
-## Possible extension: add security hub integration
-## https://aws.amazon.com/blogs/security/integrating-aws-cloudformation-security-tests-with-aws-security-hub-and-aws-codebuild-reports/
+    entrypoint: "find /templates -name '.yaml' -maxdepth 1 -type f -exec cfn_nag --debug --no-allow-suppression  {} +"

@@ -130,7 +130,4 @@ bootstrap-environment:
 security-checks:
 	@cdk synth
 	@docker-compose up --abort-on-container-exit
-	@checkov -d .
-#\
-#		--skip-check CKV_AWS_18,CKV_AWS_51,CKV_AWS_66,CKV_AWS_56,CKV_AWS_55,CKV_AWS_21,CKV_AWS_54,CKV_AWS_53,CKV_AWS_33,CKV_AWS_23,CKV_AWS_111,CKV_AWS_79,CKV_AWS_107,CKV_AWS_109
-
+	@checkov -d . --config-file checkov.yaml

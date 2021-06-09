@@ -19,6 +19,5 @@
     "tooling_aws_region": "eu-central-1",
     "dr_aws_account_id": "123456789012",
     "dr_aws_region": "eu-central-1",
-    "code_pipeline_stack": "y",
     "aws_cdk_version": ">=1.108.0"
 }

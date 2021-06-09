@@ -1,0 +1,9 @@
+branch: master
+download-external-modules: false
+evaluate-variables: true
+external-modules-download-path: .external_modules
+framework: all
+output: cli
+skip-check:
+  - CKV_AWS_18 # Ensure the S3 bucket has access logging enabled
+  - CKV_AWS_21 # Ensure the S3 bucket has versioning enabled

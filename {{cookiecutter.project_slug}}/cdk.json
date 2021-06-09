@@ -8,16 +8,16 @@
     "@aws-cdk/core:newStyleStackSynthesis": "true",
     "environments": {
       "master": {
-        "account": "605104900840",
-        "region": "us-east-1"
+        "account": "{{ cookiecutter.main_aws_account_id }}",
+        "region": "{{ cookiecutter.main_aws_region }}"
       },
       "tooling": {
-        "account": "605104900840",
-        "region": "us-east-1"
+        "account": "{{ cookiecutter.tooling_aws_account_id }}",
+        "region": "{{ cookiecutter.tooling_aws_region }}"
       },
       "disasterRecovery": {
-        "account": "605104900840",
-        "region": "us-east-2"
+        "account": "{{ cookiecutter.dr_aws_account_id }}",
+        "region": "{{ cookiecutter.dr_aws_region }}"
       }
     },
     "parameters": {
