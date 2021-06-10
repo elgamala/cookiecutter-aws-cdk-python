@@ -173,6 +173,11 @@ class CICDPipeline(BaseStack):
             actions=[security_checks_action]
         )
 
+        pipeline.add_stage(
+            stage_name='CDK-Diff',
+            actions=[cdk_diff_action]
+        )
+
         if 'addManualApprovalStep' in config and config['addManualApprovalStep']:
             pipeline.add_stage(
                 stage_name='Manual-Approval',
