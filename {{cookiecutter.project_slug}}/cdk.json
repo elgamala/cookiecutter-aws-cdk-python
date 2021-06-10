@@ -1,7 +1,7 @@
 {
   "app": "python3 app.py",
   "context": {
-    "@aws-cdk/core:bootstrapQualifier": "{{ cookiecutter.project_slug }}",
+    "@aws-cdk/core:bootstrapQualifier": "{{ cookiecutter.aws_cdk_qualifier }}",
     "@aws-cdk/core:enableStackNameDuplicates": "true",
     "aws-cdk:enableDiffNoFail": "true",
     "@aws-cdk/core:stackRelativeExports": "true",
@@ -21,12 +21,7 @@
       }
     },
     "parameters": {
-      "kms": {
-        "keyAdminRoleNames": [
-          "OrganizationAccountAccessRole"
-        ]
-      },
-        "all": {
+      "all": {
         "tags": []
       },
       "codeCommit": "{{ cookiecutter.project_slug }}",

@@ -33,8 +33,12 @@ class IAMPrincipals(Enum):
 
     @staticmethod
     def get_key_admins(scope: core.Construct, id: str):
-        kms_config = scope.node.try_get_context('parameters')['kms']
-        return IAMPrincipals.get_roles(scope, id, kms_config['keyAdminRoleNames'])
+
+        stack = core.Stack.of(scope)
+        return [IAMPrincipals.get_role(
+          scope, id,
+          f'KMSKeyAdmin-{stack.node.try_get_context("@aws-cdk/core:bootstrapQualifier")}-'
+          f'{stack.account}-{stack.region}')]
 
     @staticmethod
     def get_cluster_admins(scope: core.Construct, id: str):

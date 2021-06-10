@@ -1,7 +1,7 @@
 {
     "full_name": "Your fullname",
-    "email": "<your alias>@amazon.com",
-    "github_username": "your alias",
+    "email": "<your email address>",
+    "github_username": "your github username",
     "project_name": "Project1",
     "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
     "project_short_description": "AWS CDK Boilerplate in python contains all the boilerplate you need to create a standardized AWS CDK Project with unittest and security checks included.",
@@ -13,11 +13,12 @@
     "open_source_license": [
         "MIT license"
     ],
-    "main_aws_account_id": "123456789012",
-    "main_aws_region": "eu-central-1",
-    "tooling_aws_account_id": "123456789012",
-    "tooling_aws_region": "eu-central-1",
-    "dr_aws_account_id": "123456789012",
-    "dr_aws_region": "eu-central-1",
-    "aws_cdk_version": ">=1.108.0"
+    "main_aws_account_id": "your main AWS account ID i.e. 123456789012",
+    "main_aws_region": "your main AWS region i.e. eu-central-1",
+    "tooling_aws_account_id": "your tooling AWS account ID i.e. 123456789012",
+    "tooling_aws_region": "your tooling AWS region i.e. eu-central-1",
+    "dr_aws_account_id": "your disaster recovery AWS account ID i.e. 123456789012",
+    "dr_aws_region": "your disaster recovery AWS region i.e. eu-central-1",
+    "aws_cdk_version": ">=1.108.0",
+    "aws_cdk_qualifier" : "{{ random_ascii_string(10).lower() }}"
 }

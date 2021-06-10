@@ -5,5 +5,15 @@ external-modules-download-path: .external_modules
 framework: all
 output: cli
 skip-check:
-  - CKV_AWS_18 # Ensure the S3 bucket has access logging enabled
-  - CKV_AWS_21 # Ensure the S3 bucket has versioning enabled
+  - CKV_AWS_18    # Ensure the S3 bucket has access logging enabled
+  - CKV_AWS_21    # Ensure the S3 bucket has versioning enabled
+  - CKV_AWS_33    # Ensure KMS key policy does not contain wildcard (*) principal
+  - CKV_AWS_53    # Ensure S3 bucket has block public ACLS enabled
+  - CKV_AWS_54    # Ensure S3 bucket has block public policy enabled
+  - CKV_AWS_55    # Ensure S3 bucket has ignore public ACLs enabled
+  - CKV_AWS_56    # Ensure S3 bucket has 'restrict_public_bucket' enabled
+  - CKV_AWS_163   # Ensure ECR image scanning on push is enabled
+  - CKV_AWS_51    # Ensure ECR Image Tags are immutable
+  - CKV_AWS_107   # Ensure IAM policies does not allow credentials exposure
+  - CKV_AWS_111   # Ensure IAM policies does not allow write access without constraints
+

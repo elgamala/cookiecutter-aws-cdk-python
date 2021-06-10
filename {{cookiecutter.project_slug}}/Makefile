@@ -88,8 +88,8 @@ install: clean ## install the package to the active Python's site-packages
 all bootstrap deploy diff destroy: check-credentials
 
 bootstrap: qualifier 			:= $(shell cat cdk.json | jq -r '.context."@aws-cdk/core:bootstrapQualifier"')
-bootstrap: main_account 		:= $(shell cat cdk.json | jq -r '.context.environments.eksMaster.account')
-bootstrap: main_region 			:= $(shell cat cdk.json | jq -r '.context.environments.eksMaster.region')
+bootstrap: main_account 		:= $(shell cat cdk.json | jq -r '.context.environments.master.account')
+bootstrap: main_region 			:= $(shell cat cdk.json | jq -r '.context.environments.master.region')
 bootstrap: tooling_account 		:= $(shell cat cdk.json | jq -r '.context.environments.tooling.account')
 bootstrap: tooling_region 		:= $(shell cat cdk.json | jq -r '.context.environments.tooling.region')
 bootstrap: dr_account 			:= $(shell cat cdk.json | jq -r '.context.environments.disasterRecovery.account')
@@ -101,12 +101,7 @@ check-credentials:
 
 ls synth diff deploy destroy:
 	@echo "\033[92mRunning CDK $@ $(filter-out $@,$(MAKECMDGOALS))\033[0m"
-	@cdk $@ --all --require-approval never --progress events \
-		--parameters EcoStruxure-Secrets:ImagePullSecretUsername="$(CDK_IMAGE_PULL_SECRET_USERNAME)" \
-		--parameters EcoStruxure-Secrets:ImagePullSecretPassword="$(CDK_IMAGE_PULL_SECRET_PASSWORD)" \
-		--parameters EcoStruxure-Secrets:ArgoCDOIDCConfigSecret="$(CDK_ARGOCD_OIDC_CONFIG_SECRET)" \
-		--parameters EcoStruxure-Secrets:AppOIDCConfigSecret="$(CDK_APP_OIDC_CONFIG_SECRET)"
-
+	@cdk $@ --all --require-approval never --progress events
 bootstrap:
 	@$(MAKE) bootstrap-environment account=$(main_account) region=$(main_region) qualifier=${qualifier}
 	@$(MAKE) bootstrap-environment account=$(tooling_account) region=$(tooling_region) qualifier=${qualifier}
@@ -117,7 +112,6 @@ bootstrap-environment:
 	@aws cloudformation deploy \
 		--stack-name 'CDKToolkit' \
 		--template-file prerequisites/cdk-bootstrap.yaml \
-		--role-arn "arn:aws:iam::$(account):role/cdk-$(qualifier)-cfn-exec-role-$(account)-$(region)" \
 		--parameter-overrides "Qualifier=$(qualifier)" \
 		--no-fail-on-empty-changeset \
 		--capabilities CAPABILITY_NAMED_IAM \

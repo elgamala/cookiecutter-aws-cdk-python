@@ -94,3 +94,5 @@ class BackupStack(BaseStack):
             ]
         )
 
+        self.node.add_dependency(dr_stack)
+
