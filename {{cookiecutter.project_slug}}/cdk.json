@@ -15,7 +15,7 @@
         "account": "{{ cookiecutter.tooling_aws_account_id }}",
         "region": "{{ cookiecutter.tooling_aws_region }}"
       },
-      "disasterRecovery": {
+      "disasterRecovery": { // Could be optional
         "account": "{{ cookiecutter.dr_aws_account_id }}",
         "region": "{{ cookiecutter.dr_aws_region }}"
       }

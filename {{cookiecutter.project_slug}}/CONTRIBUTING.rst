@@ -1,127 +1,58 @@
-.. highlight:: shell
+# Guidelines
 
-============
-Contributing
-============
+## Git Guidelines
 
-Contributions are welcome, and they are greatly appreciated! Every little bit
-helps, and credit will always be given.
+### Basic commands
 
-You can contribute in many ways:
+Here, you can find some useful links for using Git:
 
-Types of Contributions
-----------------------
+- [Git CheatSheet](https://about.gitlab.com/images/press/git-cheat-sheet.pdf) (Source: gitlab.com)
+- [Git CheatSheet](https://education.github.com/git-cheat-sheet-education.pdf) (Source: github.com)
+- [Git Command reference](https://git-scm.com/docs) (Source: git-scm.com)
 
-Report Bugs
-~~~~~~~~~~~
+## Typical Git workflow
 
-Report bugs at https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/issues.
+To keep things simple we orientate the workflow on the official GitHub flow:
 
-If you are reporting a bug, please include:
+    GitHub flow is a lightweight, branch-based workflow that supports teams and projects where deployments are made regularly
 
-* Your operating system name and version.
-* Any details about your local setup that might be helpful in troubleshooting.
-* Detailed steps to reproduce the bug.
+The flow uses simple feature branches and one simple but important rule:
 
-Fix Bugs
-~~~~~~~~
+    main branch has to be always deployable.
 
-Look through the GitHub issues for bugs. Anything tagged with "bug" and "help
-wanted" is open to whoever wants to implement it.
+This is the typical workflow:
 
-Implement Features
-~~~~~~~~~~~~~~~~~~
+1. Before your start the work on a new feature, pull down the latest changes of the main branch
+1. Create a branches for features
+    1. develop a new feature in a separate feature branch
+    1. use a descriptive branch name like `refactor-authentication` or `make-retina-avatars`
+1. Add commits with commit messages
+    1. Commit as often as possible to you local branch.
+    1. Add a commit message to each commit you do. The commit message should describe why a particular change was made.
+    1. Use the [7 rules of a great Git commit message](#The seven rules of a great Git commit message) (see following section)
+    1. In order to trace requested features to actual code changes, reference the JIRA tickets in the last section of the commit message
+1. Open a Pull Request to integrate your feature with the main branch
+1. Request a code review from your teammates and discuss your solution
+    1. Review your own code as well
+    1. Request a review from at least one additional team member
+1. Deploy and test your feature on test environment
+1. Close pull request and merge tested features into main branch
+1. Deploy main branch
 
-Look through the GitHub issues for features. Anything tagged with "enhancement"
-and "help wanted" is open to whoever wants to implement it.
+## The seven rules of a great Git commit message
 
-Write Documentation
-~~~~~~~~~~~~~~~~~~~
+(Source: https://chris.beams.io/posts/git-commit/)
 
-{{ cookiecutter.project_name }} could always use more documentation, whether as part of the
-official {{ cookiecutter.project_name }} docs, in docstrings, or even on the web in blog posts,
-articles, and such.
+1. Separate subject from body with a blank line
+1. Limit the subject line to 50 characters
+1. Capitalize the subject line
+1. Do not end the subject line with a period
+1. Use the imperative mood in the subject line
+1. Wrap the body at 72 characters
+1. Use the body to explain what and why vs how
 
-Submit Feedback
-~~~~~~~~~~~~~~~
+## Review best practices
 
-The best way to send feedback is to file an issue at https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/issues.
-
-If you are proposing a feature:
-
-* Explain in detail how it would work.
-* Keep the scope as narrow as possible, to make it easier to implement.
-* Remember that this is a volunteer-driven project, and that contributions
-  are welcome :)
-
-Get Started!
-------------
-
-Ready to contribute? Here's how to set up `{{ cookiecutter.project_slug }}` for local development.
-
-1. Fork the `{{ cookiecutter.project_slug }}` repo on GitHub.
-2. Clone your fork locally::
-
-    $ git clone git@github.com:your_name_here/{{ cookiecutter.project_slug }}.git
-
-3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
-
-    $ mkvirtualenv {{ cookiecutter.project_slug }}
-    $ cd {{ cookiecutter.project_slug }}/
-    $ python setup.py develop
-
-4. Create a branch for local development::
-
-    $ git checkout -b name-of-your-bugfix-or-feature
-
-   Now you can make your changes locally.
-
-5. When you're done making changes, check that your changes pass flake8 and the
-   tests, including testing other Python versions with tox::
-
-    $ flake8 {{ cookiecutter.project_slug }} tests
-    $ python setup.py test or pytest
-    $ tox
-
-   To get flake8 and tox, just pip install them into your virtualenv.
-
-6. Commit your changes and push your branch to GitHub::
-
-    $ git add .
-    $ git commit -m "Your detailed description of your changes."
-    $ git push origin name-of-your-bugfix-or-feature
-
-7. Submit a pull request through the GitHub website.
-
-Pull Request Guidelines
------------------------
-
-Before you submit a pull request, check that it meets these guidelines:
-
-1. The pull request should include tests.
-2. If the pull request adds functionality, the docs should be updated. Put
-   your new functionality into a function with a docstring, and add the
-   feature to the list in README.rst.
-3. The pull request should work for Python 3.5, 3.6, 3.7 and 3.8, and for PyPy. Check
-   https://travis-ci.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/pull_requests
-   and make sure that the tests pass for all supported Python versions.
-
-Tips
-----
-
-To run a subset of tests::
-
-    $ pytest tests.test_{{ cookiecutter.project_slug }}
-
-Deploying
----------
-
-A reminder for the maintainers on how to deploy.
-Make sure all your changes are committed (including an entry in HISTORY.rst).
-Then run::
-
-$ bump2version patch # possible: major / minor / patch
-$ git push
-$ git push --tags
-
-Travis will then deploy to PyPI if tests pass.
+- Ask questions and write comments to open pull requests
+- Reviews discuss content, not the person who created it
+- Reviews are constructive and start conversation around feedback
